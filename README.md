@@ -1,1 +1,1 @@
-# dsp_sdr_basic
+Experiments for DSP/SDR course in Lampa Kids School
