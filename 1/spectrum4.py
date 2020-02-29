@@ -6,21 +6,12 @@ from scipy.fftpack import fft, ifft, fftshift
 
 N = 512
 
-t = np.linspace(0, 0.5, N, endpoint=True)
-
-f1 = 1000
-
-f2 = 2000
-
-f3 = 5000
+t = np.linspace(0, 20, N, endpoint=True)
 
 x = np.zeros(N)
 
-#x = x + np.sin(2*np.pi*f1*t)
-
-#x = x + np.sin(2*np.pi*f2*t)
-
-#x = x + np.sin(2*np.pi*f3*t)
+for i in range(1, 10000):
+    x += np.sin(i*t)/i
 
 # Get Spectrum
 
