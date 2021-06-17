@@ -8,7 +8,7 @@ x = np.array([-1, 2, 0, 1, 3, 3, 2, 0])
 # FFT parameters
 N = 1024
 xFFT1 = fft(x, N)
-xFFT2 = xFFT1[0:N/2]
+xFFT2 = xFFT1[0:int(N/2)]
 spectrum = np.abs(xFFT2)
 
 # Plot results
