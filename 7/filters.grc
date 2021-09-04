@@ -1,0 +1,396 @@
+options:
+  parameters:
+    author: ''
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: rtl_receive
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Not titled yet
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: Fc
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Frequency Fc (Hz)
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '1'
+    stop: 4*samp_rate
+    value: '2000'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [471, 15]
+    rotation: 0
+    state: true
+- name: cutoff_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 3e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [634, 18]
+    rotation: 0
+    state: enabled
+- name: noise_amp
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.001'
+    stop: '1.0'
+    value: '0.1'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [309, 16]
+    rotation: 0
+    state: true
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 20e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 10]
+    rotation: 0
+    state: enabled
+- name: transition_bw
+  id: variable
+  parameters:
+    comment: ''
+    value: 0.1e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [738, 18]
+    rotation: 0
+    state: enabled
+- name: analog_noise_source_x_0
+  id: analog_noise_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: noise_amp
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_type: analog.GR_GAUSSIAN
+    seed: '0'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [140, 362]
+    rotation: 0
+    state: true
+- name: analog_sig_source_x_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1'
+    comment: ''
+    freq: Fc
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: float
+    waveform: analog.GR_COS_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [142, 223]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [417, 323]
+    rotation: 0
+    state: true
+- name: fir_filter_xxx_0
+  id: fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: '0'
+    taps: firdes.low_pass(1, samp_rate, cutoff_freq, transition_bw)
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [672, 588]
+    rotation: 0
+    state: true
+- name: fir_filter_xxx_0_0
+  id: fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: '0'
+    taps: '[2.338900265226065060e-22, 2.336196373874421645e-07, 1.137990713929966612e-06,
+      3.320500739926154766e-06, 7.178541790947223543e-06, 1.267015317588040384e-05,
+      1.902402261783776098e-05, 2.444958954365653391e-05, 2.595501861970046532e-05,
+      1.941136573988154414e-05, -4.281096255803112840e-20, -3.686395656888474007e-05,
+      -9.413012595320489201e-05, -1.713609972540869125e-04, -2.629067385749667357e-04,
+      -3.564225913698628118e-04, -4.322360040013248925e-04, -4.640770412296663506e-04,
+      -4.215778504731435895e-04, -2.747126100926001731e-04, 4.015559995865015422e-19,
+      4.121347736859056875e-04, 9.498760443769086121e-04, 1.573808571988341782e-03,
+      2.213571887749250962e-03, 2.768910682562185886e-03, 3.116298444013859952e-03,
+      3.121651325905961533e-03, 2.658735080597373138e-03, 1.631808571198940794e-03,
+      -1.504274108711267495e-18, -2.199938531045241442e-03, -4.836322578960977787e-03,
+      -7.674438387210765627e-03, -1.038075277202057251e-02, -1.254125425680609890e-02,
+      -1.369399035769461662e-02, -1.337382750481876971e-02, -1.116542563356441586e-02,
+      -6.758706001177846624e-03, 3.094495681024556746e-18, 9.068166604915894186e-03,
+      2.018495278196710818e-02, 3.287133578407466783e-02, 4.645459143598253127e-02,
+      6.011622758700453650e-02, 7.295940329274590297e-02, 8.408914102100295551e-02,
+      9.269667005389173320e-02, 9.813833978263421243e-02, 9.999987881987924820e-02,
+      9.813833978263421243e-02, 9.269667005389173320e-02, 8.408914102100294163e-02,
+      7.295940329274588909e-02, 6.011622758700450875e-02, 4.645459143598251045e-02,
+      3.287133578407466089e-02, 2.018495278196710124e-02, 9.068166604915890716e-03,
+      3.094495681024555976e-18, -6.758706001177840553e-03, -1.116542563356441239e-02,
+      -1.337382750481876624e-02, -1.369399035769460968e-02, -1.254125425680609890e-02,
+      -1.038075277202056036e-02, -7.674438387210760423e-03, -4.836322578960970849e-03,
+      -2.199938531045240141e-03, -1.504274108711267495e-18, 1.631808571198939059e-03,
+      2.658735080597371837e-03, 3.121651325905956762e-03, 3.116298444013857784e-03,
+      2.768910682562185019e-03, 2.213571887749247492e-03, 1.573808571988340914e-03,
+      9.498760443769067689e-04, 4.121347736859051454e-04, 4.015559995865015422e-19,
+      -2.747126100925996310e-04, -4.215778504731435895e-04, -4.640770412296650496e-04,
+      -4.322360040013238625e-04, -3.564225913698612939e-04, -2.629067385749663563e-04,
+      -1.713609972540869125e-04, -9.413012595320436346e-05, -3.686395656888471974e-05,
+      -4.281096255803086961e-20, 1.941136573988152042e-05, 2.595501861970046532e-05,
+      2.444958954365625270e-05, 1.902402261783791684e-05, 1.267015317588009721e-05,
+      7.178541790947315023e-06, 3.320500739926154766e-06, 1.137990713929905837e-06,
+      2.336196373874351765e-07, 2.338900265226065060e-22, ]'
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [687, 763]
+    rotation: 0
+    state: true
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: '1500'
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fir_filter_fff
+    width: '100'
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [676, 377]
+    rotation: 0
+    state: enabled
+- name: qtgui_sink_x_0
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: '0'
+    fftsize: 1024*8
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'False'
+    showrf: 'False'
+    type: float
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [947, 580]
+    rotation: 0
+    state: true
+- name: qtgui_sink_x_0_0
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: '0'
+    fftsize: 1024*8
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'False'
+    showrf: 'False'
+    type: float
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [946, 223]
+    rotation: 0
+    state: true
+- name: qtgui_sink_x_0_1
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: '0'
+    fftsize: 1024*8
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'False'
+    showrf: 'False'
+    type: float
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [945, 410]
+    rotation: 0
+    state: true
+- name: qtgui_sink_x_0_2
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: '0'
+    fftsize: 1024*8
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'False'
+    showrf: 'False'
+    type: float
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [950, 755]
+    rotation: 0
+    state: true
+
+connections:
+- [analog_noise_source_x_0, '0', blocks_add_xx_0, '1']
+- [analog_sig_source_x_0, '0', blocks_add_xx_0, '0']
+- [blocks_add_xx_0, '0', fir_filter_xxx_0, '0']
+- [blocks_add_xx_0, '0', fir_filter_xxx_0_0, '0']
+- [blocks_add_xx_0, '0', low_pass_filter_0, '0']
+- [blocks_add_xx_0, '0', qtgui_sink_x_0_0, '0']
+- [fir_filter_xxx_0, '0', qtgui_sink_x_0, '0']
+- [fir_filter_xxx_0_0, '0', qtgui_sink_x_0_2, '0']
+- [low_pass_filter_0, '0', qtgui_sink_x_0_1, '0']
+
+metadata:
+  file_format: 1
