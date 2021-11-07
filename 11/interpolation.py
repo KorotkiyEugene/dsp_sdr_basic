@@ -23,6 +23,10 @@ sig = np.cos(2*np.pi*F1*t)
 sig_with_zeros = np.zeros(int(NUM_POINTS*INTERP_ORDER))
 sig_with_zeros[::INTERP_ORDER] = sig
 
+print(sig)
+print(sig_with_zeros)
+
+
 interp_fir_taps = firwin(NFIR, 1/INTERP_ORDER)
 
 interp_sig = lfilter(interp_fir_taps, 1.0, sig_with_zeros)
