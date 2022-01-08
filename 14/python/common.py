@@ -99,7 +99,12 @@ def am_demod(sig, Fc=1e3, Fs=100e3):
     sig_len = len(sig)
     shifted_to_zero_am_sig = sig*create_complex_exponent(Fc=-Fc, Fs=Fs, Amp=1, N=sig_len)
     sig_iq = filt(shifted_to_zero_am_sig, Fc=0.5, NFIR=101)    
-    am_demod_sig = 2*abs(sig_iq)-1
+    #print('max abs(real):')
+    #print(max(abs(np.real(sig_iq))))
+    #print('max abs(imag):')
+    #print(max(abs(np.imag(sig_iq))))
+    #am_demod_sig = 2*abs(sig_iq)-1
+    am_demod_sig = 2*np.real(sig_iq)-1
     return am_demod_sig
     
 def create_harmonic(Fc=1e3, Fs=20e3, Amp=1, N=2e1):
