@@ -103,8 +103,7 @@ def am_demod(sig, Fc=1e3, Fs=100e3):
     #print(max(abs(np.real(sig_iq))))
     #print('max abs(imag):')
     #print(max(abs(np.imag(sig_iq))))
-    #am_demod_sig = 2*abs(sig_iq)-1
-    am_demod_sig = 2*np.real(sig_iq)-1
+    am_demod_sig = 2*abs(sig_iq)-1
     return am_demod_sig
     
 def create_harmonic(Fc=1e3, Fs=20e3, Amp=1, N=2e1):
