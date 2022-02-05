@@ -78,7 +78,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 10e6
+    value: 30e6
   states:
     bus_sink: false
     bus_source: false
@@ -102,7 +102,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [455, 339]
+    coordinate: [304, 228.0]
     rotation: 0
     state: true
 - name: limesdr_source_0
@@ -115,6 +115,7 @@ blocks:
     analog_bandw_ch1: 1.5e6
     calibr_bandw_ch0: 2.5e6
     calibr_bandw_ch1: 2.5e6
+    ch_align: 'False'
     channel_mode: '0'
     comment: ''
     dacVal: '180'
@@ -130,14 +131,14 @@ blocks:
     nco_freq_ch0: '0'
     nco_freq_ch1: '0'
     oversample: '0'
-    rf_freq: 100e6
+    rf_freq: rf_freq*1e6
     samp_rate: samp_rate
     serial: ''
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [194, 321]
+    coordinate: [32, 204.0]
     rotation: 0
     state: true
 - name: qtgui_sink_x_0
@@ -166,7 +167,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [721, 333]
+    coordinate: [520, 196.0]
     rotation: 0
     state: true
 

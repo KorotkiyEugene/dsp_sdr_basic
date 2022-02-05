@@ -10,7 +10,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: lime_rx_fm
+    id: lime_tx_rx_fm
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -21,7 +21,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: Lime Receive FM
+    title: Lime Tx Rx FM
     window_size: ''
   states:
     bus_sink: false
@@ -32,16 +32,28 @@ options:
     state: enabled
 
 blocks:
-- name: decimation1
+- name: audio_samp_rate
   id: variable
   parameters:
     comment: ''
-    value: '10'
+    value: 48e3
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [593, 13]
+    coordinate: [312, 20.0]
+    rotation: 0
+    state: enabled
+- name: decimation1
+  id: variable
+  parameters:
+    comment: ''
+    value: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 20.0]
     rotation: 0
     state: enabled
 - name: decimation2
@@ -53,7 +65,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [716, 12]
+    coordinate: [632, 20.0]
     rotation: 0
     state: enabled
 - name: freq
@@ -65,18 +77,30 @@ blocks:
     min_len: '200'
     orient: Qt.Horizontal
     rangeType: float
-    start: '80'
+    start: '50'
     step: '0.1'
-    stop: '110'
-    value: '100'
+    stop: '1500'
+    value: '250'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [301, 17]
+    coordinate: [184, 12.0]
     rotation: 0
     state: true
+- name: interp
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 20.0]
+    rotation: 0
+    state: enabled
 - name: rx_gain
   id: variable_qtgui_range
   parameters:
@@ -89,27 +113,48 @@ blocks:
     start: '1'
     step: '1'
     stop: '60'
-    value: '50'
+    value: '60'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [446, 12]
+    coordinate: [968, 20.0]
     rotation: 0
     state: true
 - name: samp_rate
   id: variable
   parameters:
     comment: ''
-    value: 2.4e6
+    value: audio_samp_rate*interp
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [184, 10]
+    coordinate: [744, 20.0]
     rotation: 0
     state: enabled
+- name: tx_gain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: TX Gain
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '1'
+    stop: '60'
+    value: '60'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 20.0]
+    rotation: 0
+    state: true
 - name: analog_wfm_rcv_0
   id: analog_wfm_rcv
   parameters:
@@ -124,7 +169,27 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [848, 388.0]
+    coordinate: [664, 340.0]
+    rotation: 0
+    state: true
+- name: analog_wfm_tx_0
+  id: analog_wfm_tx
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_rate: int(audio_samp_rate)
+    comment: ''
+    fh: '-1.0'
+    max_dev: 75e3
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: int(samp_rate)
+    tau: 75e-6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 452.0]
     rotation: 0
     state: true
 - name: audio_sink_0
@@ -141,7 +206,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1144, 324.0]
+    coordinate: [1048, 284.0]
     rotation: 0
     state: disabled
 - name: audio_sink_1
@@ -158,28 +223,61 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1160, 212.0]
+    coordinate: [1048, 212.0]
     rotation: 0
     state: true
-- name: blocks_throttle_0
-  id: blocks_throttle
+- name: blocks_wavfile_source_0
+  id: blocks_wavfile_source
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    ignoretag: 'True'
+    file: /home/parallels/dsp_sdr_basic/16/guitar.wav
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_second: samp_rate
-    type: complex
-    vlen: '1'
+    nchan: '1'
+    repeat: 'True'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 260.0]
+    coordinate: [48, 476.0]
     rotation: 0
-    state: true
+    state: enabled
+- name: limesdr_sink_0
+  id: limesdr_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    allow_tcxo_dac: '0'
+    analog_bandw_ch0: '0'
+    analog_bandw_ch1: 5e6
+    calibr_bandw_ch0: '0'
+    calibr_bandw_ch1: 2.5e6
+    channel_mode: '0'
+    comment: ''
+    dacVal: '180'
+    digital_bandw_ch0: '0'
+    digital_bandw_ch1: samp_rate
+    filename: ''
+    gain_dB_ch0: tx_gain
+    gain_dB_ch1: '1'
+    length_tag_name: ''
+    nco_freq_ch0: '0'
+    nco_freq_ch1: '0'
+    oversample: '0'
+    pa_path_ch0: '1'
+    pa_path_ch1: '1'
+    rf_freq: freq*1e6
+    samp_rate: samp_rate
+    serial: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 428.0]
+    rotation: 0
+    state: enabled
 - name: limesdr_source_0
   id: limesdr_source
   parameters:
@@ -213,9 +311,89 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [48, 236.0]
+    coordinate: [40, 284.0]
     rotation: 0
     state: true
+- name: qtgui_freq_sink_x_0_0_0_0_0_0_0_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '8192'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 516.0]
+    rotation: 0
+    state: enabled
 - name: qtgui_sink_x_0
   id: qtgui_sink_x
   parameters:
@@ -228,7 +406,7 @@ blocks:
     gui_hint: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: '"Rx spectrum"'
     plotconst: 'True'
     plotfreq: 'True'
     plottime: 'True'
@@ -242,7 +420,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 164.0]
+    coordinate: [384, 156.0]
     rotation: 0
     state: enabled
 - name: qtgui_sink_x_0_0
@@ -271,7 +449,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1144, 420.0]
+    coordinate: [1040, 348.0]
     rotation: 0
     state: disabled
 - name: qtgui_sink_x_0_1
@@ -300,9 +478,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 236.0]
+    coordinate: [664, 180.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: rational_resampler_xxx_0
   id: rational_resampler_xxx
   parameters:
@@ -320,7 +498,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 308.0]
+    coordinate: [384, 292.0]
     rotation: 0
     state: true
 
@@ -328,9 +506,11 @@ connections:
 - [analog_wfm_rcv_0, '0', audio_sink_0, '0']
 - [analog_wfm_rcv_0, '0', audio_sink_1, '0']
 - [analog_wfm_rcv_0, '0', qtgui_sink_x_0_0, '0']
-- [blocks_throttle_0, '0', qtgui_sink_x_0, '0']
-- [blocks_throttle_0, '0', rational_resampler_xxx_0, '0']
-- [limesdr_source_0, '0', blocks_throttle_0, '0']
+- [analog_wfm_tx_0, '0', limesdr_sink_0, '0']
+- [analog_wfm_tx_0, '0', qtgui_freq_sink_x_0_0_0_0_0_0_0_0, '0']
+- [blocks_wavfile_source_0, '0', analog_wfm_tx_0, '0']
+- [limesdr_source_0, '0', qtgui_sink_x_0, '0']
+- [limesdr_source_0, '0', rational_resampler_xxx_0, '0']
 - [rational_resampler_xxx_0, '0', analog_wfm_rcv_0, '0']
 - [rational_resampler_xxx_0, '0', qtgui_sink_x_0_1, '0']
 

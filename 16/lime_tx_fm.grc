@@ -118,7 +118,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 346]
+    coordinate: [312, 284.0]
     rotation: 0
     state: true
 - name: blocks_wavfile_source_0
@@ -136,7 +136,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [25, 373]
+    coordinate: [24, 308.0]
     rotation: 0
     state: enabled
 - name: limesdr_sink_0
@@ -170,7 +170,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [804, 306]
+    coordinate: [696, 244.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0_0_0_0_0_0_0_0
@@ -250,7 +250,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [810, 426]
+    coordinate: [696, 356.0]
     rotation: 0
     state: enabled
 
