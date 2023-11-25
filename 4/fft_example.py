@@ -6,8 +6,8 @@ import scipy
 Fs = 50e6
 Ts = 1/Fs
 
-NSAMP = int(1e5)
 NFFT = 1024
+NSAMP = NFFT
 SNR = 60
 
 F = 4.88e6
@@ -16,7 +16,7 @@ Amp = 0.5  # pwr = 20*log10(0.5) = -6.0206 dB
 Win = scipy.signal.windows.nuttall(NFFT, sym=False)
 WIN_CPG = -20*np.log10(np.sum(Win)/NFFT)  # Window Coherent Power Gain
 
-t = np.arange(1, NSAMP + 1) * Ts
+t = np.arange(0, NSAMP) * Ts
 
 fVals = Fs * np.arange(-NFFT/2, NFFT/2) / NFFT
 
@@ -26,9 +26,9 @@ sig = Amp * np.exp(2*np.pi*1j*F*t)
 measured_pwr_sig = 10*np.log10(np.mean(np.abs(sig)**2))
 print("Measured signal power: {:.2f} dB".format(measured_pwr_sig))
 
-sig_w_noise = sig + np.random.normal(0, np.sqrt(10**(-SNR/10)), sig.shape) + 1j * np.random.normal(0, np.sqrt(10**(-SNR/10)), sig.shape)
+noise = np.random.normal(0, np.sqrt(10**(-SNR/10)), sig.shape) + 1j * np.random.normal(0, np.sqrt(10**(-SNR/10)), sig.shape)
 
-noise = sig_w_noise - sig
+sig_w_noise = sig + noise
 
 measured_pwr_noise = 10*np.log10(np.mean(np.abs(noise)**2))
 print("Measured noise power: {:.2f} dB".format(measured_pwr_noise))
